@@ -100,3 +100,16 @@ void host_touch_bindings(const int32_t *controls)
 		__atomic_store_n(&web_shared[_web_touch_bindings + index], controls[index], __ATOMIC_RELAXED);
 	__atomic_add_fetch(&web_shared[_web_touch_bindings_serial], 1, __ATOMIC_RELEASE);
 }
+
+/* the Android overlay's cheats menu (host_touch.c): the page has none, so
+nothing is ever asked (no switch change, no one-time cheat, the super
+jump's strength not set) and the game's report is not kept */
+void host_touch_cheats_read(int32_t *request)
+{
+	memset(request, 0, 4 * sizeof(*request));
+}
+
+void host_touch_cheats_report(int32_t state)
+{
+	(void)state;
+}

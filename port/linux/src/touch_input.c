@@ -255,9 +255,11 @@ static int touch_controls_setting(void)
 	return setting;
 }
 
-/* input.touch_cheats_button as _touch_scene_cheats or 0 */
+/* input.touch_cheats_button as _touch_scene_cheats or 0; the web page has
+no cheats menu (port/web/src/web_touch.c) */
 static int touch_cheats_setting(void)
 {
+#ifdef HALO_ANDROID
 	static int setting;
 	static unsigned long read_at = (unsigned long)-1;
 
@@ -267,6 +269,9 @@ static int touch_cheats_setting(void)
 		setting = config_boolean("input.touch_cheats_button") ? _touch_scene_cheats : 0;
 	}
 	return setting;
+#else
+	return 0;
+#endif
 }
 
 /* applies what the cheats menu asked since the last read: the super jump's
