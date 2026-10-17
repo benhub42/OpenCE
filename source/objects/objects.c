@@ -53,6 +53,7 @@ OBJECTS.C
 #include "sound/game_sound.h"
 #include "structures/structure_bsp_definitions.h"
 #include "units/units.h"
+#include "time_freeze.h" /* port: port/linux/game/time_freeze.c */
 /* port: object_bounds_cache.c's */
 void object_bounds_cache_update(long object_index, real_point3d const *center, real radius);
 /* port: port/linux/game/first_person_legs.c's */
@@ -4447,6 +4448,8 @@ void objects_update(
 	struct object_header_datum *object_header;
 
 	boolean dont_update_object = ((game_time_get()&1)!=0) && game_players_are_double_speed();
+	/* port: the cheats menu's time freeze: only the players' objects update */
+	boolean time_frozen = time_freeze_active();
 
 	profile_enter(section);
 
@@ -4514,9 +4517,10 @@ void objects_update(
 				match_assert("c:\\halo\\SOURCE\\objects\\objects.c", 416, object_get(object_index)->object.parent_object_index==NONE);
 				match_assert("c:\\halo\\SOURCE\\objects\\objects.c", 417, object_get(object_index)->object.next_object_index==NONE);
 			
-				if (!dont_update_object ||
+				if ((!dont_update_object ||
 					TEST_FLAG(_object_mask_unit, object_header->type) &&
-					unit_get(object_index)->unit.player_index!=NONE)
+					unit_get(object_index)->unit.player_index!=NONE) &&
+					(!time_frozen || time_freeze_object_updates(object_index))) /* port: time freeze */
 				{
 					object_update(object_index);
 				}
