@@ -29,6 +29,11 @@ float render_interpolation_game_time_sec(long ticks);
 /* the port's menus' screen for one of ui.map's, by name, else the name
 (port/linux/game/menu_tags.c) */
 char const *pc_menus_screen(char const *name);
+
+/* the cheats menu's super jump strength, the jump's speed times this (4 as
+the original's; port/linux/game/touch_game.c) */
+float touch_game_super_jump_scale(void);
+
 /* the Custom Edition tag cache window, or NULL unless the
 game.custom_edition setting reserved it (port/linux/src/xbox_memory.c) */
 void *halo_custom_edition_tag_cache(void);
